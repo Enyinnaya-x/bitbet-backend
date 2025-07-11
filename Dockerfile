@@ -1,20 +1,13 @@
-# Use official PHP 8.2 with Apache
+# Use official PHP Apache image
 FROM php:8.2-apache
 
-# Enable Apache mod_rewrite (good for future-proofing)
+# Copy files FROM the backend/ folder INTO Apache web root
+COPY backend/ /var/www/html/
+
+# Enable URL rewriting
 RUN a2enmod rewrite
 
-# Optional: enable useful PHP extensions
-RUN docker-php-ext-install mysqli
-
-# Copy your code to the container's web root
-COPY . /var/www/html/
-
-# Set correct working directory
-WORKDIR /var/www/html/
-
-# Optional: set file permissions (Apache user owns it)
+# Fix permissions (optional but good)
 RUN chown -R www-data:www-data /var/www/html
 
-# Expose port 80 (default Apache port)
 EXPOSE 80
