@@ -1,7 +1,7 @@
 <?php
 require_once '../config/db.php';
 require_once "../utils/sanitize.php";
-
+session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -32,6 +32,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $stmt->bind_param("sss", $email, $hashedpassword, $username);
 
         if ($stmt->execute()) {
+            session_start();
+            $_SESSION['user_id'] = $conn->insert_id; // newly inserted ID
+            $_SESSION['email'] = $email;
+            $_SESSION['username'] = $username;
             $response['success'] = true;
         } else {
             $response['message'] = "❌ Error inserting data: " . $stmt->error;
