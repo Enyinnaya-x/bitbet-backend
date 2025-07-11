@@ -1,4 +1,5 @@
 <?php
+
 $servername = "sql3.freesqldatabase.com";  // use the actual host shown
 $username = "sql3789442";                 // your actual username
 $password = "Ri2Fn4ZcCW";               // your actual password
