@@ -20,6 +20,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $email = sanitizeString($_POST["email"]);
     $password = sanitizeString($_POST["password"]);
     $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+    if (empty($username) || empty($email) || empty($password)) {
+        $response['message'] = "❌ All fields are required.";
+        echo json_encode($response);
+        exit;
+    }
     $sql = "INSERT INTO users (email, password, user_name) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
