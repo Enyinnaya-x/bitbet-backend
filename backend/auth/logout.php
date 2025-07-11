@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -17,6 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $response['success'] = true;
 }
-
+ob_clean();
 echo json_encode($response);
 ?>
