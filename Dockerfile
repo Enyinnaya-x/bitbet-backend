@@ -1,9 +1,15 @@
 FROM php:8.2-apache
 
-# Copy everything from backend folder to Apache root
+# Install mysqli extension
+RUN docker-php-ext-install mysqli
+
+# Enable Apache rewrite module
+RUN a2enmod rewrite
+
+# Copy backend files into Apache root
 COPY backend/ /var/www/html/
 
-RUN a2enmod rewrite
+# Set ownership
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
