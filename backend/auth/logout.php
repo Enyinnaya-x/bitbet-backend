@@ -1,8 +1,4 @@
 <?php
-session_set_cookie_params([
-    'samesite' => 'None',
-    'secure' => true,
-]);
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");
 header('Content-Type: application/json');
