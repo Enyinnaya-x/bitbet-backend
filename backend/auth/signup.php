@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = sanitizeString($_POST["email"]);
     $password = sanitizeString($_POST["password"]);
     $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+    $bitbucks = 5000;
 
     if (empty($username) || empty($email) || empty($password)) {
         $response['message'] = "❌ All fields are required.";
@@ -30,11 +31,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    $sql = "INSERT INTO users (email, password, user_name) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO users (email, password, user_name, bitbucks) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("sss", $email, $hashedpassword, $username);
+        $stmt->bind_param("ssss", $email, $hashedpassword, $username, $bitbucks);
 
         if ($stmt->execute()) {
             $_SESSION['user_id'] = $conn->insert_id;
