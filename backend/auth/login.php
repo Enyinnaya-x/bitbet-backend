@@ -35,8 +35,8 @@ $response = ['success' => false];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // 🔹 Accept raw JSON if sent
-    $email = isset($input['email']) ? sanitizeString($input['email']) : '';
-    $password = isset($input['password']) ? sanitizeString($input['password']) : '';
+    $email = sanitizeString($_POST['email']);
+    $password = sanitizeString($_POST['password']);
 
     if (empty($email) || empty($password)) {
         $response['message'] = "❌ Email and password are required.";
