@@ -54,7 +54,7 @@ $result = $stmt->get_result();
 
 if ($result && $row = $result->fetch_assoc()) {
     $response['success'] = true;
-    $response['data'] = $row['balance'];
+    $response['data'] = $row['bitbucks'];
 } else {
     $response['message'] = 'Failed to fetch balance';
 }
