@@ -2,18 +2,24 @@
 session_set_cookie_params(['samesite' => 'None', 'secure' => true]);
 session_start();
 
+// ✅ CORS HEADERS (RECOMMENDED STRUCTURE)
 $allowed_origins = ['https://bitbet.netlify.app'];
-if (in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
+
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
     header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
     header("Access-Control-Allow-Credentials: true");
 }
-header("Content-Type: application/json");
+
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Content-Type: application/json");
+
+// ✅ Respond early to preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
+
 
 require_once '../config/db.php';
 
@@ -27,9 +33,8 @@ if (!isset($_SESSION['uid'])) {
 $uid = $_SESSION['uid'];
 $input = json_decode(file_get_contents("php://input"), true);
 $amount = floatval($input['amount'] ?? 0);
-$guess = intval($input['guess'] ?? 0);
 
-if ($amount <= 0 || $guess < 1 || $guess > 10) {
+if ($amount <= 0) {
     $response['message'] = 'Invalid amount or guess';
     echo json_encode($response);
     exit;
@@ -37,6 +42,7 @@ if ($amount <= 0 || $guess < 1 || $guess > 10) {
 
 // Generate number
 $randomNum = rand(1, 10);
+$userRandom = rand(1, 10);
 
 // Get user bitbucks
 $stmt = $conn->prepare("SELECT bitbucks FROM users WHERE id = ?");
@@ -58,9 +64,9 @@ $current -= $amount;
 // Win condition
 $win = false;
 $payout = 0;
-if ($guess === $randomNum) {
+if ($userRandom === $randomNum) {
     $win = true;
-    $payout = $amount * $guess;
+    $payout = $amount * $userRandom;
     $current += $payout;
 }
 
