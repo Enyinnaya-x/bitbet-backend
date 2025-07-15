@@ -35,8 +35,9 @@ $response = ['success' => false];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // 🔹 Accept raw JSON if sent
-    $email = sanitizeString($_POST['email']);
-    $password = sanitizeString($_POST['password']);
+    $input = json_decode(file_get_contents("php://input"), true);
+    $email = sanitizeString($input["email"] ?? '');
+    $password = sanitizeString($input["password"] ?? '');
 
     if (empty($email) || empty($password)) {
         $response['message'] = "❌ Email and password are required.";
@@ -45,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // 🔹 Prepare and execute login query
-    $sql = "SELECT user_id, password, user_name FROM users WHERE email = ?";
+    $sql = "SELECT id, password, user_name FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
@@ -58,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (password_verify($password, $user['password'])) {
                 // ✅ Set session variables
-                $_SESSION['uid'] = $user['user_id'];
+                $_SESSION['uid'] = $user['id'];
                 $_SESSION['email'] = $email;
                 $_SESSION['username'] = $user['user_name'];
 
