@@ -46,7 +46,7 @@ if (!isset($_SESSION['uid'])) {
 $uid = $_SESSION['uid'];
 
 // ✅ Fetch balance
-$sql = "SELECT balance FROM users WHERE id = ?";
+$sql = "SELECT bitbucks FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $uid);
 $stmt->execute();
